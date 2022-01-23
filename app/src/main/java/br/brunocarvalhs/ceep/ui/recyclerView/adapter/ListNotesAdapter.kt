@@ -1,36 +1,34 @@
-package br.brunocarvalhs.ceep.ui.adapter
+package br.brunocarvalhs.ceep.ui.recyclerView.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import br.brunocarvalhs.ceep.R
 import br.brunocarvalhs.ceep.databinding.ItemNoteBinding
 import br.brunocarvalhs.ceep.model.Note
+import br.brunocarvalhs.ceep.ui.recyclerView.interfaces.OnItemClickListener
+import br.brunocarvalhs.ceep.ui.recyclerView.viewHolder.NoteViewHolder
 
 class ListNotesAdapter(private val notes: ArrayList<Note>) :
-    RecyclerView.Adapter<ListNotesAdapter.ViewHolder>() {
+    RecyclerView.Adapter<NoteViewHolder>() {
 
     private lateinit var viewBinding: ItemNoteBinding
+    private var onItemClickListener: OnItemClickListener? = null
 
     override fun getItemCount() = notes.size
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): NoteViewHolder {
         viewBinding = ItemNoteBinding
             .inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
-
-        return ViewHolder(viewBinding)
+        return NoteViewHolder(viewBinding, onItemClickListener)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: NoteViewHolder, position: Int) {
         viewHolder.title.text = notes[position].title
         viewHolder.describe.text = notes[position].describe
     }
 
-    class ViewHolder(view: ItemNoteBinding) : RecyclerView.ViewHolder(view.root) {
-        val title: TextView = view.itemNoteCardTitle
-        val describe: TextView = view.itemNoteCardDescribe
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
     }
 
     fun add(note: Note) {
